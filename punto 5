@@ -1,0 +1,71 @@
+import java.util.*;
+
+public class Dijkstra5 {
+
+    static int V = 5;
+
+    public static void main(String[] args) {
+
+        int[][] g = {
+            {0,10,0,0,3},
+            {0,0,2,0,4},
+            {0,0,0,9,0},
+            {0,0,7,0,0},
+            {0,1,8,2,0}
+        };
+
+        dijkstra(g, 0);
+    }
+
+    static void dijkstra(int[][] g, int inicio) {
+
+        int[] dist = new int[V];
+        boolean[] visitado = new boolean[V];
+        int[] padre = new int[V];
+
+        Arrays.fill(dist, 999);
+        dist[inicio] = 0;
+        padre[inicio] = -1;
+
+        for (int i = 0; i < V - 1; i++) {
+
+            int u = minDist(dist, visitado);
+            visitado[u] = true;
+
+            for (int v = 0; v < V; v++) {
+                if (!visitado[v] && g[u][v] != 0 &&
+                        dist[u] + g[u][v] < dist[v]) {
+
+                    dist[v] = dist[u] + g[u][v];
+                    padre[v] = u;
+                }
+            }
+        }
+
+        for (int i = 0; i < V; i++) {
+            System.out.print("0 -> " + i + " = " + dist[i] + " | Camino: ");
+            mostrarCamino(padre, i);
+            System.out.println();
+        }
+    }
+
+    static int minDist(int[] dist, boolean[] visitado) {
+        int min = 999, indice = -1;
+
+        for (int i = 0; i < V; i++) {
+            if (!visitado[i] && dist[i] < min) {
+                min = dist[i];
+                indice = i;
+            }
+        }
+        return indice;
+    }
+
+    static void mostrarCamino(int[] padre, int v) {
+
+        if (v == -1) return;
+
+        mostrarCamino(padre, padre[v]);
+        System.out.print(v + " ");
+    }
+}
