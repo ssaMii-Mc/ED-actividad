@@ -1,0 +1,54 @@
+import java.util.*;
+
+public class Kruskal3 {
+
+    static int[] padre = new int[6];
+
+    public static void main(String[] args) {
+
+        int[][] aristas = {
+            {0,2,1},
+            {1,2,2},
+            {2,3,2},
+            {4,5,3},
+            {3,5,4},
+            {0,3,5},
+            {1,4,5},
+            {0,1,6},
+            {2,4,6}
+        };
+
+        Arrays.sort(aristas, (a, b) -> a[2] - b[2]);
+
+        for (int i = 0; i < 6; i++) padre[i] = i;
+
+        int costo = 0;
+        int descartadas = 0;
+
+        System.out.println("aristas seleccionadas:");
+
+        for (int[] e : aristas) {
+
+            int u = e[0];
+            int v = e[1];
+            int p = e[2];
+
+            if (find(u) != find(v)) {
+                padre[find(u)] = find(v);
+                costo += p;
+                System.out.println(u + " - " + v + " : " + p);
+            } else {
+                descartadas++;
+            }
+        }
+
+        System.out.println("Costo total: " + costo);
+        System.out.println("Aristas descartadas: " + descartadas);
+    }
+
+    static int find(int x) {
+        if (padre[x] == x) return x;
+        return find(padre[x]);
+    }
+}
+    
