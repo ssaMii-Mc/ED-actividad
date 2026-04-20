@@ -1,0 +1,104 @@
+import java.util.*;
+
+public class MST1 {
+
+    static int V = 6;
+    static int[] padre = new int[6];
+
+    public static void main(String[] args) {
+
+        int[][] g = {
+            {0,6,1,5,0,0},
+            {6,0,2,0,5,0},
+            {1,2,0,2,6,0},
+            {5,0,2,0,0,4},
+            {0,5,6,0,0,3},
+            {0,0,0,4,3,0}
+        };
+
+        System.out.println("Prim");
+        prim(g);
+
+        System.out.println("Kruskal");
+        kruskal();
+    }
+
+    // Este es el metodo Prim
+    static void prim(int[][] g) {
+
+        boolean[] visitado = new boolean[V];
+        visitado[0] = true;
+
+        int costo = 0;
+
+        System.out.println("aristas:");
+
+        for (int k = 0; k < V - 1; k++) {
+
+            int min = 999;
+            int a = -1, b = -1;
+
+            for (int i = 0; i < V; i++) {
+                if (visitado[i]) {
+                    for (int j = 0; j < V; j++) {
+                        if (!visitado[j] && g[i][j] != 0 && g[i][j] < min) {
+                            min = g[i][j];
+                            a = i;
+                            b = j;
+                        }
+                    }
+                }
+            }
+
+            visitado[b] = true;
+            costo += min;
+
+            System.out.println(a + " - " + b + " : " + min);
+        }
+
+        System.out.println("Costo total: " + costo);
+    }
+
+    // Este es el metodo de Kruskal
+    static void kruskal() {
+
+        int[][] aristas = {
+            {0,2,1},
+            {1,2,2},
+            {2,3,2},
+            {4,5,3},
+            {3,5,4},
+            {0,3,5},
+            {1,4,5},
+            {0,1,6},
+            {2,4,6}
+        };
+
+        Arrays.sort(aristas, (a, b) -> a[2] - b[2]);
+
+        for (int i = 0; i < V; i++) padre[i] = i;
+
+        int costo = 0;
+
+        System.out.println("Aristas:");
+
+        for (int[] e : aristas) {
+            int u = e[0];
+            int v = e[1];
+            int p = e[2];
+
+            if (find(u) != find(v)) {
+                padre[find(u)] = find(v);
+                costo += p;
+                System.out.println(u + " - " + v + " : " + p);
+            }
+        }
+
+        System.out.println("Costo total: " + costo);
+    }
+
+    static int find(int x) {
+        if (padre[x] == x) return x;
+        return find(padre[x]);
+    }
+}
