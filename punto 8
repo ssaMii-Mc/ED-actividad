@@ -1,0 +1,131 @@
+import java.util.*;
+
+public class Red8 {
+
+    static int V = 6;
+    static List<List<Integer>> grafo = new ArrayList<>();
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+
+        for (int i = 0; i < V; i++) {
+            grafo.add(new ArrayList<>());
+        }
+
+        int op;
+
+        do {
+            System.out.println("\n1. Agregar conexion");
+            System.out.println("2. Ver si se comunican");
+            System.out.println("3. Camino mas corto");
+            System.out.println("0. Salir");
+            System.out.print("Opcion: ");
+            op = sc.nextInt();
+
+            if (op == 1) {
+                System.out.print("Nodo A: ");
+                int a = sc.nextInt();
+                System.out.print("Nodo B: ");
+                int b = sc.nextInt();
+
+                grafo.get(a).add(b);
+                grafo.get(b).add(a);
+
+                System.out.println("Conexion agregada");
+
+            } else if (op == 2) {
+                System.out.print("Origen: ");
+                int a = sc.nextInt();
+                System.out.print("Destino: ");
+                int b = sc.nextInt();
+
+                if (bfsConexion(a, b)) {
+                    System.out.println("Si hay comunicacion");
+                } else {
+                    System.out.println("No hay comunicacion");
+                }
+
+            } else if (op == 3) {
+                System.out.print("Origen: ");
+                int a = sc.nextInt();
+                System.out.print("Destino: ");
+                int b = sc.nextInt();
+
+                bfsCamino(a, b);
+            }
+
+        } while (op != 0);
+    }
+
+    static boolean bfsConexion(int inicio, int destino) {
+
+        boolean[] visitado = new boolean[V];
+        Queue<Integer> cola = new LinkedList<>();
+
+        cola.add(inicio);
+        visitado[inicio] = true;
+
+        while (!cola.isEmpty()) {
+
+            int actual = cola.poll();
+
+            if (actual == destino) return true;
+
+            for (int vecino : grafo.get(actual)) {
+                if (!visitado[vecino]) {
+                    visitado[vecino] = true;
+                    cola.add(vecino);
+                }
+            }
+        }
+
+        return false;
+    }
+
+
+    static void bfsCamino(int inicio, int destino) {
+
+        boolean[] visitado = new boolean[V];
+        int[] padre = new int[V];
+        Queue<Integer> cola = new LinkedList<>();
+
+        cola.add(inicio);
+        visitado[inicio] = true;
+        padre[inicio] = -1;
+
+        while (!cola.isEmpty()) {
+
+            int actual = cola.poll();
+
+            for (int vecino : grafo.get(actual)) {
+                if (!visitado[vecino]) {
+                    visitado[vecino] = true;
+                    padre[vecino] = actual;
+                    cola.add(vecino);
+                }
+            }
+        }
+
+        if (!visitado[destino]) {
+            System.out.println("No hay camino");
+            return;
+        }
+
+        List<Integer> camino = new ArrayList<>();
+
+        for (int v = destino; v != -1; v = padre[v]) {
+            camino.add(v);
+        }
+
+        Collections.reverse(camino);
+
+        System.out.print("Camino: ");
+        for (int i = 0; i < camino.size(); i++) {
+            System.out.print(camino.get(i));
+            if (i < camino.size() - 1) System.out.print(" - ");
+        }
+        System.out.println();
+    }
+}
