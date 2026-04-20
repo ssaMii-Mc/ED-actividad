@@ -1,0 +1,57 @@
+import java.util.*;
+
+public class Prim2 {
+
+    static int V = 6;
+
+    public static void main(String[] args) {
+
+        int[][] g = {
+            {0,6,1,5,0,0},
+            {6,0,2,0,5,0},
+            {1,2,0,2,6,0},
+            {5,0,2,0,0,4},
+            {0,5,6,0,0,3},
+            {0,0,0,4,3,0}
+        };
+
+        System.out.println("Cuando inicia en 0");
+        prim(g, 0);
+
+        System.out.println("Cuando inicia en 2");
+        prim(g, 2);
+    }
+
+    static void prim(int[][] g, int inicio) {
+
+        boolean[] visitado = new boolean[V];
+        visitado[inicio] = true;
+
+        int costo = 0;
+
+        for (int k = 0; k < V - 1; k++) {
+
+            int min = 999;
+            int a = -1, b = -1;
+
+            for (int i = 0; i < V; i++) {
+                if (visitado[i]) {
+                    for (int j = 0; j < V; j++) {
+                        if (!visitado[j] && g[i][j] != 0 && g[i][j] < min) {
+                            min = g[i][j];
+                            a = i;
+                            b = j;
+                        }
+                    }
+                }
+            }
+
+            visitado[b] = true;
+            costo += min;
+
+            System.out.println("Paso " + (k+1) + ": " + a + " - " + b + " (" + min + ")");
+        }
+
+        System.out.println("Costo total: " + costo);
+    }
+}
