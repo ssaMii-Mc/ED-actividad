@@ -1,0 +1,73 @@
+import java.util.*;
+
+public class Floyd6 {
+
+    static final int INF = 999;
+
+    public static void main(String[] args) {
+
+        int[][] dist = {
+            {0,10,INF,INF,3},
+            {INF,0,2,INF,4},
+            {INF,INF,0,9,INF},
+            {INF,INF,7,0,INF},
+            {INF,1,8,2,0}
+        };
+
+        int V = dist.length;
+
+        int[][] siguiente = new int[V][V];
+
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                if (dist[i][j] != INF && i != j) {
+                    siguiente[i][j] = j;
+                } else {
+                    siguiente[i][j] = -1;
+                }
+            }
+        }
+
+        for (int k = 0; k < V; k++) {
+            for (int i = 0; i < V; i++) {
+                for (int j = 0; j < V; j++) {
+
+                    if (dist[i][k] + dist[k][j] < dist[i][j]) {
+                        dist[i][j] = dist[i][k] + dist[k][j];
+                        siguiente[i][j] = siguiente[i][k];
+                    }
+                }
+            }
+        }
+
+        System.out.println("Matriz de distancias:");
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                if (dist[i][j] == INF)
+                    System.out.print("INF ");
+                else
+                    System.out.print(dist[i][j] + " ");
+            }
+            System.out.println();
+        }
+
+        System.out.print("\nCamino de 0 a 3: ");
+        mostrarCamino(0, 3, siguiente);
+        System.out.println("\nDistancia: " + dist[0][3]);
+    }
+
+    static void mostrarCamino(int u, int v, int[][] sig) {
+
+        if (sig[u][v] == -1) {
+            System.out.println("No hay camino");
+            return;
+        }
+
+        System.out.print(u);
+
+        while (u != v) {
+            u = sig[u][v];
+            System.out.print(" -> " + u);
+        }
+    }
+}
