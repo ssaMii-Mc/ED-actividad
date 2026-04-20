@@ -1,0 +1,48 @@
+public class Warshall7 {
+
+    public static void main(String[] args) {
+
+        int[][] g = {
+            {0,1,0,0},
+            {0,0,1,0},
+            {1,0,0,1},
+            {0,0,0,0}
+        };
+
+        int V = g.length;
+
+        for (int k = 0; k < V; k++) {
+            for (int i = 0; i < V; i++) {
+                for (int j = 0; j < V; j++) {
+                    if (g[i][j] == 1 || (g[i][k] == 1 && g[k][j] == 1)) {
+                        g[i][j] = 1;
+                    }
+                }
+            }
+        }
+
+        System.out.println("Matriz de alcanzabilidad:");
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                System.out.print(g[i][j] + " ");
+            }
+            System.out.println();
+        }
+
+        boolean conexo = true;
+
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                if (g[i][j] == 0) {
+                    conexo = false;
+                }
+            }
+        }
+
+        if (conexo) {
+            System.out.println("El grafo es fuertemente conexo");
+        } else {
+            System.out.println("El grafo no es fuertemente conexo");
+        }
+    }
+}
