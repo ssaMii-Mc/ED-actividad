@@ -1,0 +1,75 @@
+import java.util.*;
+
+public class BFSP4 {
+
+    public static void main(String[] args) {
+
+        int V = 6;
+
+        List<List<Integer>> grafo = new ArrayList<>();
+
+        for (int i = 0; i < V; i++) {
+            grafo.add(new ArrayList<>());
+        }
+
+        grafo.get(0).add(2);
+        grafo.get(0).add(1);
+
+        grafo.get(1).add(0);
+        grafo.get(1).add(3);
+
+        grafo.get(2).add(0);
+        grafo.get(2).add(3);
+
+        grafo.get(3).add(1);
+        grafo.get(3).add(2);
+        grafo.get(3).add(4);
+
+        grafo.get(4).add(3);
+        grafo.get(4).add(5);
+
+        grafo.get(5).add(4);
+
+        bfs(grafo, 0, 5);
+    }
+
+    static void bfs(List<List<Integer>> g, int inicio, int destino) {
+
+        Queue<Integer> cola = new LinkedList<>();
+        boolean[] visitado = new boolean[6];
+        int[] padre = new int[6];
+
+        cola.add(inicio);
+        visitado[inicio] = true;
+        padre[inicio] = -1;
+
+        while (!cola.isEmpty()) {
+
+            int actual = cola.poll();
+
+            for (int vecino : g.get(actual)) {
+                if (!visitado[vecino]) {
+                    visitado[vecino] = true;
+                    padre[vecino] = actual;
+                    cola.add(vecino);
+                }
+            }
+        }
+
+        List<Integer> camino = new ArrayList<>();
+
+        for (int v = destino; v != -1; v = padre[v]) {
+            camino.add(v);
+        }
+
+        Collections.reverse(camino);
+
+        System.out.println("Camino mas corto:");
+        for (int i = 0; i < camino.size(); i++) {
+            System.out.print(camino.get(i));
+            if (i < camino.size() - 1) {
+                System.out.print(" -> ");
+            }
+        }
+    }
+}
